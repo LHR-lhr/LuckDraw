@@ -1,18 +1,55 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <luckDraw type="roulette" :pl="pl"></luckDraw>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import luckDraw from '@/components/luckDraw.vue'
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    luckDraw
+  },
+  data () {
+    return {
+      pl: [
+        {
+          draw_id: '1',
+          num: '1',
+          prize_id: '0',
+          prize_name: '德克萨斯',
+          prize_type: 2,
+          isPrize: 1
+        },
+        {
+          draw_id: '2',
+          num: '1',
+          prize_id: '0',
+          prize_name: '风笛',
+          prize_type: 1,
+          isPrize: 1
+        },
+        {
+          draw_id: '3',
+          num: '1',
+          prize_id: '0',
+          prize_name: '桃金娘',
+          prize_type: 3,
+          isPrize: 1
+        },
+        {
+          draw_id: '4',
+          num: '1',
+          prize_id: '0',
+          prize_name: '斯卡蒂',
+          prize_type: 1,
+          isPrize: 1
+        }
+      ]
+    }
   }
 }
 </script>
