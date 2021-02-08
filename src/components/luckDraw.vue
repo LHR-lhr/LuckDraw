@@ -3,19 +3,19 @@
   <!-- 俄罗斯大转盘 -->
   <div v-if="type=='roulette'">
     <div class="roulette">
-      <div class="turntable" :style="{'height':`${2*r}px`}">
-        <div class="btn" @click="beginRotate()" v-if="prizeList.length>0">
+      <div class="turntable" :style="{'height':`${_2r}px`}">
+        <div class="btn" @click="beginRotate()" v-if="prizeList.length>0" :style="style.btn">
           <img :src="btn" class="image" />
         </div>
         <div class="wrapper" :style="rotateStyle">
           <div class="item" v-for="(item,ind) in prizeList" :key="ind"
-            :style="{'height':`${2*r}px`,'transform':`rotate(-${(parseFloat(360/prizeList.length).toFixed(2))*parseFloat(ind + 1)}deg)`,'width':`${r}px`,'borderRadius':`0 ${r}px ${r}px 0`,'borderColor':openBorder?border:'rgba(0,0,0,0)'}">
-            <div class="item-inner" :style="{'height':`${2*r}px`,'transform':`translateX(-${r}px) ${crotate('z')}`,'width':`${r}px`,'borderRadius':`${r}px 0 0 ${r}px`,'background':(ind+1)!=0 && (ind+1)%2!=0?odd:even}">
-              <div class="text" :style="{'bottom':`${getPix * r}px`,'right':distance,'transform':`translate(${prizeList.length>=6?'47%':'43%'},${parseFloat(360/prizeList.length).toFixed(2)}%) ${crotate('f')}`}">
+            :style="{'height':`${_2r}px`,'transform':`rotate(-${(parseFloat(360/prizeList.length).toFixed(2))*parseFloat(ind + 1)}deg)`,'width':`${_r}px`,'borderRadius':`0 ${_r}px ${_r}px 0`,'borderColor':openBorder?border:'rgba(0,0,0,0)'}">
+            <div class="item-inner" :style="[style.fs,{'height':`${_2r}px`,'transform':`translateX(-${_r}px) ${crotate('z')}`,'width':`${_r}px`,'borderRadius':`${_r}px 0 0 ${_r}px`,'background':(ind+1)!=0 && (ind+1)%2!=0?odd:even}]">
+              <div class="text" :style="[style.textheight,{'bottom':`${_pixr}px`,'right':distance,'transform':`translate(${prizeList.length>=6?'47%':'43%'},${parseFloat(360/prizeList.length).toFixed(2)}%) ${crotate('f')}`}]">
                 <div class="prize-pic">
-                  <img :src="item.icon" class="img" :style="{'width':item.isPrize?'':0}" />
+                  <img :src="item.icon" class="img" :style="style.prizeimg" />
                 </div>
-                <div class="prize-type">{{ item.prize_name }}</div>
+                <div class="prize-type" :style="style.fs">{{ item.prize_name }}</div>
               </div>
             </div>
           </div>
@@ -41,7 +41,7 @@ pl:原始奖品列表
 even:偶数选项背景色
 odd:奇数选项背景色
 **/
-
+import { formatPix } from '@/utils/helper.js'
 export default {
   name: 'LuckDraw',
   props: {
@@ -105,10 +105,20 @@ export default {
       duration: 3000, // 转盘旋转时间
       rotateAngle: 0, // 旋转角度
       angleList: [],
-      prizeList: []
+      prizeList: [],
+      style: {}
     }
   },
   computed: {
+    _r () {
+      return formatPix(this.r)
+    },
+    _2r () {
+      return formatPix(this.r * 2)
+    },
+    _pixr () {
+      return formatPix(this.getPix * this.r)
+    },
     crotate (type) {
       return (type) => {
         const deg = parseFloat(360 / this.prizeList.length).toFixed(2)
@@ -136,6 +146,7 @@ export default {
       } else {
         x = parseFloat(z) * Math.tan(horn).toFixed(4)
       }
+      x = formatPix(x)
       return `${x.toFixed(2)}px`
     },
     pLength () {
@@ -145,11 +156,22 @@ export default {
       return this.pix
     },
     rotateStyle () {
+      const h = formatPix(this.r * 2)
       return `-webkit-transition: transform ${this.config.duration}ms ${this.config.mode};
       transition: transform ${this.config.duration}ms ${this.config.mode};
       -webkit-transform: rotate(${this.rotateAngle}deg);
-      transform: rotate(${this.rotateAngle}deg);height:${this.r * 2}px;`
+      transform: rotate(${this.rotateAngle}deg);height:${h}px;`
     }
+  },
+  created () {
+    const btn = `top: calc(50% - ${formatPix(11)}px);width:${formatPix(160)}px;height:${formatPix(160)}px;`
+    const fs = `font-size:${formatPix(24)}px;`
+    const textheight = `height:${formatPix(82)}px;`
+    const prizeimg = `width:${formatPix(46)}px;height:${formatPix(46)}px;`
+    this.style.btn = btn
+    this.style.fs = fs
+    this.style.textheight = textheight
+    this.style.prizeimg = prizeimg
   },
   mounted () {
     // do something after mounting vue instance
@@ -194,7 +216,7 @@ export default {
     rotateOver () {
       this.ing = false
       this.prize = this.prizeList[this.index]
-      if (this.prize) alert(`恭喜获得${this.prize.prize_name}`)
+      if (this.prize.isPrize) alert(`恭喜获得${this.prize.prize_name}`)
       else alert('肥肠抱歉，您没有获得奖项')
     },
     // 关闭弹窗
@@ -301,11 +323,11 @@ $font-color-base:#E4E7ED;
         position: relative;
         .btn {
             position: absolute;
-            top: calc(50% - 11px);
+            // top: calc(50% - 11px);
             left: 50%;
             transform: translate(-50%,-50%);
-            width: 160px;
-            height: 160px;
+            // width: 160px;
+            // height: 160px;
             z-index: 99;
         }
         .wrapper {
@@ -329,7 +351,7 @@ $font-color-base:#E4E7ED;
                 text-align: center;
                 transform-origin: right center;
                 box-sizing: border-box;
-                font-size: 24px;
+                // font-size: 24px;
                 color: #fff;
                 position: relative;
                 &::after {
@@ -345,16 +367,16 @@ $font-color-base:#E4E7ED;
                 .text {
                     display: block;
                     transform-origin: center;
-                    height: 82px;
+                    // height: 82px;
                     text-align: center;
                     position: absolute;
                     width: 100%;
                     .prize-pic .img {
-                        width: 46px;
-                        height: 46px;
+                        // width: 46px;
+                        // height: 46px;
                     }
                     .prize-type {
-                        font-size: 24px;
+                        // font-size: 24px;
                     }
                 }
             }
@@ -367,4 +389,7 @@ $font-color-base:#E4E7ED;
     width: 100%;
     text-align: center;
 }
+img[src=""],img:not([src]){
+      opacity:0;
+ }
 </style>
