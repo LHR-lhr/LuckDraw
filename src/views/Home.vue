@@ -20,7 +20,7 @@ export default {
           draw_id: '1',
           num: '1',
           prize_id: '0',
-          prize_name: '德克萨斯',
+          prize_name: '乌有',
           prize_type: 2,
           isPrize: 1
         },
@@ -28,7 +28,7 @@ export default {
           draw_id: '2',
           num: '1',
           prize_id: '0',
-          prize_name: '风笛',
+          prize_name: '夕',
           prize_type: 1,
           isPrize: 1
         },
@@ -36,7 +36,7 @@ export default {
           draw_id: '3',
           num: '1',
           prize_id: '0',
-          prize_name: '桃金娘',
+          prize_name: 'kokodayo',
           prize_type: 3,
           isPrize: 1
         },
@@ -44,7 +44,7 @@ export default {
           draw_id: '4',
           num: '1',
           prize_id: '0',
-          prize_name: '斯卡蒂',
+          prize_name: '嵯峨',
           prize_type: 1,
           isPrize: 1
         }
